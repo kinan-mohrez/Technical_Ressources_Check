@@ -17,4 +17,42 @@
 }
 
 
+        
+         
+         
+                  
+                  
+         .btn-grad {
+            background-image: linear-gradient(to right, #4568DC 0%, #B06AB3  51%, #4568DC  100%);
+            margin: 10px;
+            padding: 15px 45px;
+            text-align: center;
+            text-transform: uppercase;
+            transition: 0.5s;
+            background-size: 200% auto;
+            color: white;            
+            box-shadow: 0 0 20px #eee;
+            border-radius: 10px;
+            display: block;
+          }
 
+          .btn-grad:hover {
+            background-position: right center; /* change the direction of the change here */
+            color: #fff;
+            text-decoration: none;
+            transition: 0.8s;
+          }
+         
+         
+         
+.shadow{
+  height: 5px;
+  width: 90%;
+  align-items: center;
+  justify-content: center;
+  color: #8080801f;
+  border: 5px solid;
+  filter: blur(5px);
+  margin-left: auto;
+    margin-right: auto;
+}
