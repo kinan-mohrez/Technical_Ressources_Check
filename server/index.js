@@ -56,7 +56,7 @@ app.post('/user', async (req, res) => {
 
 //add new company
 
-app.post('/company', (req, res) => {
+app.post('/company', async (req, res) => {
 	const {
 		name,
 		password,
@@ -68,12 +68,13 @@ app.post('/company', (req, res) => {
 		founded_year,
 		image,
 	} = req.body;
+	const hashedPassword = await bcrypt.hash(password, 10);
 	pool
 		.query(
 			'INSERT INTO companies (name, password, email , country, website ,num_employees, respond_time ,founded_year,image) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) ;',
 			[
 				name,
-				password,
+				hashedPassword,
 				email,
 				country,
 				website,
