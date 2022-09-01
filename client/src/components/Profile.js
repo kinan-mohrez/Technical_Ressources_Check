@@ -9,8 +9,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { MDBBtn } from 'mdb-react-ui-kit';
 
 export default function Profile({ company }) {
-	console.log(company);
-
 	return (
 		<main>
 			<header>

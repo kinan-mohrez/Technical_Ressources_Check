@@ -171,8 +171,13 @@ app.post('/login', async (req, res) => {
 	}
 });
 
-app.get('/', (req, res) => {
-	res.send('Hello World!');
+app.get('/home', async (req, res) => {
+	const potentialLogin = await pool.query('SELECT * FROM companies');
+	if (potentialLogin.rowCount > 0) {
+		res.json(potentialLogin);
+	} else {
+		res.json({ errors: errors });
+	}
 });
 
 app.listen(port, () => {
