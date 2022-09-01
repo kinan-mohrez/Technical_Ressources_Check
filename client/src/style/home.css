@@ -65,3 +65,8 @@ main {
   border-radius: 20px;
   margin-left: 15px;
 }
+
+.coloumn{
+  column-count: 2;
+  list-style: decimal;
+}

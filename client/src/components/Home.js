@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	MDBContainer,
 	MDBTabs,
@@ -17,8 +17,26 @@ import {
 } from 'mdb-react-ui-kit';
 import '../style/home.css';
 import cube from '../images/cube_a.png';
+import Companies from './Companies';
+import ShowMore from 'react-show-more-list';
 
 export default function Home() {
+	const [companyDetails, setCompanyDetails] = useState(['']);
+
+	const [visible, setVisible] = useState(4);
+	const loadMore = () => {
+		setVisible(visible + 4);
+	};
+	useEffect(() => {
+		fetch('http://localhost:5000/home')
+			.then((response) => response.json())
+			.then((res) => {
+				setCompanyDetails(res.rows);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	}, []);
 	return (
 		<main>
 			<header>
@@ -34,10 +52,7 @@ export default function Home() {
 							</button>
 						</form>
 					</div>
-					<MDBBtn className='mb-4 w-100 btn-grad'>
-						logout
-						<i className='material-icons'>logout</i>
-					</MDBBtn>
+					<MDBBtn className='mb-4 w-100 btn-grad'>login</MDBBtn>
 				</div>
 			</header>
 			<div id='main-content'>
@@ -74,6 +89,16 @@ export default function Home() {
 						Popular: Crypto Bots E-Commerce Cloud UX/UI Mobile App Blockchain
 						No/Lowcode
 					</div>
+				</div>
+				<div className='coloumn'>
+					{companyDetails.slice(0, visible).map((com, index) => (
+						<Companies key={index} company_details={com} />
+					))}
+					{visible < companyDetails.length && (
+						<button onClick={loadMore}>
+							<i className='material-icons'>arrow_drop_down</i>
+						</button>
+					)}
 				</div>
 			</div>
 		</main>
