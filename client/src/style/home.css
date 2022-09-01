@@ -1,0 +1,67 @@
+main {
+  width: 1280px;
+  margin: 0 auto;
+  background-color: #e9ebee;
+  box-shadow: 0px 8px 30px #1d2d4f;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.l-cnt {
+  padding: 40px;
+  margin-right: 20px;
+  display: flex;
+  justify-content: flex-end;
+  justify-items: center;
+}
+#cubeImage {
+    width: 30%;
+    margin-left: 200px;
+}
+
+.cnt-label h1 , p{
+    color: #2c4a8b;
+}
+
+
+#search-form form {
+  position: relative;
+  width: 400px;
+  font-size: 16px;
+  padding: 8px 15px;
+  padding-right: 37px;
+  background-color: #3b5ca0;
+  border-radius: 20px;
+  margin-left: 15px;
+}
+
+#search form input {
+  width: 100%;
+  color: #fff;
+  border: 0;
+  background-color: transparent;
+}
+
+#search form button {
+  position: absolute;
+  top: 9px;
+  right: 6px;
+  color: #f1f1f1;
+  height: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+#search form button i {
+  font-size: 22px;
+}
+
+#search form {
+  position: relative;
+  width: 600px;
+  font-size: 16px;
+  padding: 8px 15px;
+  padding-right: 37px;
+  background-color: #3b5ca0;
+  border-radius: 20px;
+  margin-left: 15px;
+}
