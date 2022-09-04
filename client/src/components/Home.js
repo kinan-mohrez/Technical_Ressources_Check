@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
 	MDBContainer,
 	MDBTabs,
@@ -19,11 +20,13 @@ import '../style/home.css';
 import cube from '../images/cube_a.png';
 import Companies from './Companies';
 import ShowMore from 'react-show-more-list';
+import { useNavigate } from 'react-router-dom';
 
-export default function Home() {
+export default function Home({ user }) {
 	const [companyDetails, setCompanyDetails] = useState(['']);
+	const navigate = useNavigate();
 
-	const [visible, setVisible] = useState(4);
+	const [visible, setVisible] = useState(8);
 	const loadMore = () => {
 		setVisible(visible + 4);
 	};
@@ -37,6 +40,10 @@ export default function Home() {
 				console.log(error);
 			});
 	}, []);
+
+	const navigate_to_login = async (e) => {
+		navigate('/login');
+	};
 	return (
 		<main>
 			<header>
@@ -52,7 +59,31 @@ export default function Home() {
 							</button>
 						</form>
 					</div>
-					<MDBBtn className='mb-4 w-100 btn-grad'>login</MDBBtn>
+					<div className='td' id='f-name-l'>
+						<MDBBtn className='mb-4 w-100 btn-grad' onClick={navigate_to_login}>
+							{user?.loggedIn ? 'logout' : 'login'}
+						</MDBBtn>
+					</div>
+					{user?.loggedIn && (
+						<div className='td' id='f-name-l'>
+							<span>{user.user_name}</span>
+						</div>
+					)}
+
+					{user?.loggedIn && (
+						<div className='td' id='i-links'>
+							<div className='tb'>
+								<div className='td'>
+									<a href='#' id='p-link'>
+										<img
+											src='https://imagizer.imageshack.com/img921/3072/rqkhIb.jpg'
+											alt='profile_image'
+										/>
+									</a>
+								</div>
+							</div>
+						</div>
+					)}
 				</div>
 			</header>
 			<div id='main-content'>

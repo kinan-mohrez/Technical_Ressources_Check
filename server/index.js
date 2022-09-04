@@ -112,6 +112,7 @@ app.post('/login', async (req, res) => {
 		'SELECT * FROM companies WHERE email=$1',
 		[req.body.email]
 	);
+
 	if (potentialLogin.rowCount > 0) {
 		const isSamePass = await bcrypt.compare(
 			req.body.password,
@@ -119,28 +120,9 @@ app.post('/login', async (req, res) => {
 		);
 		if (isSamePass) {
 			req.session.company = {
-				description: req.body.description,
-				name: req.body.name,
-				company_id: req.body.company_id,
-				email: req.body.email,
-				country: req.body.country,
-				website: req.body.website,
-				num_employees: req.body.num_employees,
-				respond_time: req.body.respond_time,
-				founded_year: req.body.founded_year,
-				image: req.body.image,
-				category: req.body.category,
-				cover: req.body.cover,
-
-				languages: req.body.languages,
-				test_project: req.body.test_project,
-				city: req.body.city,
-				remote: req.body.remote,
-			};
-			console.log('Successful login');
-
-			res.json({
 				loggedIn: true,
+				company_id: potentialLogin.rows[0].company_id,
+				description: potentialLogin.rows[0].description,
 				name: potentialLogin.rows[0].name,
 				company_id: potentialLogin.rows[0].company_id,
 				email: potentialLogin.rows[0].email,
@@ -152,22 +134,48 @@ app.post('/login', async (req, res) => {
 				image: potentialLogin.rows[0].image,
 				category: potentialLogin.rows[0].category,
 				cover: potentialLogin.rows[0].cover,
-				description: potentialLogin.rows[0].description,
 				languages: potentialLogin.rows[0].languages,
-				test_project: potentialLogin.rows[0].test_project,
 				test_project: potentialLogin.rows[0].test_project,
 				city: potentialLogin.rows[0].city,
 				remote: potentialLogin.rows[0].remote,
-			});
+			};
+			console.log('Successful company login');
+
+			res.json({ company_login: req.session.company });
 		} else {
 			console.log('Wrong Password');
 			errors.push({ message: 'Wrong Password' });
 			res.json({ errors: errors });
 		}
 	} else {
-		console.log('the Email is not correct');
-		errors.push({ message: 'The E-mail is not correct' });
-		res.json({ errors: errors });
+		const potentialLogin = await pool.query(
+			'SELECT * FROM users WHERE email=$1',
+			[req.body.email]
+		);
+		if (potentialLogin.rowCount > 0) {
+			const isSamePass = await bcrypt.compare(
+				req.body.password,
+				potentialLogin.rows[0].password
+			);
+			if (isSamePass) {
+				req.session.user = {
+					loggedIn: true,
+					user_id: potentialLogin.rows[0].user_id,
+					first_name: potentialLogin.rows[0].first_name,
+					last_name: potentialLogin.rows[0].last_name,
+					user_name: potentialLogin.rows[0].user_name,
+					email: potentialLogin.rows[0].email,
+					image: potentialLogin.rows[0].image,
+				};
+				console.log('Successful user login');
+
+				res.json({ user_login: req.session.user });
+			}
+		} else {
+			console.log('the Email is not correct');
+			errors.push({ message: 'The E-mail is not correct' });
+			res.json({ errors: errors });
+		}
 	}
 });
 
@@ -177,6 +185,33 @@ app.get('/home', async (req, res) => {
 		res.json(potentialLogin);
 	} else {
 		res.json({ errors: errors });
+	}
+});
+
+app.post('/rating', async (req, res) => {
+	const ratingCompany = {
+		budget: req.body.budget,
+		quality: req.body.quality,
+		deadlines: req.body.deadlines,
+		collaboration: req.body.collaboration,
+	};
+	console.log(ratingCompany);
+});
+
+app.post('/companyrate', async (req, res) => {
+	console.log(req.body.company_id);
+	const companyRating = await pool.query(
+		'SELECT * FROM evaluation WHERE company_id=$1',
+		[req.body.company_id]
+	);
+	if (companyRating.rowCount > 0) {
+		const ratingCompany = {
+			budget: companyRating.rows[0].budget,
+			quality: companyRating.rows[0].quality,
+			deadlines: companyRating.rows[0].deadlines,
+			collaboration: companyRating.rows[0].collaboration,
+		};
+		res.json({ ratingCompany: ratingCompany });
 	}
 });
 
