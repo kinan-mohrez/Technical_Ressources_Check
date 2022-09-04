@@ -16,7 +16,7 @@ export default function Companies({ company_details }) {
 					<button>web</button>
 				</div>
 				<div className='td'>
-					<div class='Vertical_Line'></div>
+					<div className='Vertical_Line'></div>
 				</div>
 				<div className='td'>
 					<i className='material-icons'>flag</i>

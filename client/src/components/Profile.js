@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import '../style/profile.css';
 import 'material-icons/iconfont/material-icons.css';
 import 'material-icons/iconfont/filled.css';
@@ -7,8 +7,35 @@ import waves from '../images/waves.jpg';
 import profileImage from '../images/sample-logo.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { MDBBtn } from 'mdb-react-ui-kit';
+import { Rating } from 'react-simple-star-rating';
 
 export default function Profile({ company }) {
+	const [ratingCompany, setRatingCompany] = useState(0);
+
+	useEffect(() => {
+		const getRate = async () => {
+			const company_rate = {
+				company_id: company.company_id,
+			};
+			const requestOptions = {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(company_rate),
+			};
+			await fetch('http://localhost:5000/companyrate', requestOptions)
+				.then((response) => response.json())
+				.then((res) => {
+					setRatingCompany(res.ratingCompany);
+					// console.log(res.ratingCompany.budget);
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		};
+		getRate();
+	}, [company.company_id]);
+	console.log(ratingCompany);
+
 	return (
 		<main>
 			<header>
@@ -117,11 +144,38 @@ export default function Profile({ company }) {
 							</span>
 						</div>
 						<div id='i-box'>
-							<span className='fa fa-star checked' />
-							<span className='fa fa-star checked' />
-							<span className='fa fa-star checked' />
-							<span className='fa fa-star checked' />
-							<span className='fa fa-star' />
+							{
+								<Rating
+									allowHalfIcon={true}
+									ratingValue={ratingCompany?.budget} /* Available Props */
+								/>
+							}
+						</div>
+						<div id='i-box'>
+							{
+								<Rating
+									allowHalfIcon={true}
+									ratingValue={ratingCompany?.quality} /* Available Props */
+								/>
+							}
+						</div>
+						<div id='i-box'>
+							{
+								<Rating
+									allowHalfIcon={true}
+									ratingValue={ratingCompany?.deadlines} /* Available Props */
+								/>
+							}
+						</div>
+						<div id='i-box'>
+							{
+								<Rating
+									allowHalfIcon={true}
+									ratingValue={
+										ratingCompany?.collaboration
+									} /* Available Props */
+								/>
+							}
 						</div>
 						<p>
 							<u>11 ratings</u>

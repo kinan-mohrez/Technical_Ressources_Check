@@ -22,7 +22,7 @@ import {
 import { Navigate, Route, useNavigate } from 'react-router-dom';
 import Profile from './Profile';
 
-export default function Login({ setCompany }) {
+export default function Login({ setCompany, setUser }) {
 	const [justifyActive, setJustifyActive] = useState('tab1');
 	const [errBackend, setError] = useState(['']);
 	const [errorCompany, setErrorCompany] = useState(['']);
@@ -105,9 +105,14 @@ export default function Login({ setCompany }) {
 			await fetch('http://localhost:5000/login', requestOptions)
 				.then((response) => response.json())
 				.then((res) => {
-					if (res.loggedIn === true) {
-						setCompany(res);
+					console.log(res);
+
+					if (res.company_login?.loggedIn === true) {
+						setCompany(res.company_login);
 						navigate('/company');
+					} else if (res.user_login?.loggedIn === true) {
+						setUser(res.user_login);
+						navigate('/home');
 					} else {
 						setError(res.errors[0].message);
 					}
