@@ -31,14 +31,17 @@ export default function Home({ user }) {
 		setVisible(visible + 4);
 	};
 	useEffect(() => {
-		fetch('http://localhost:5000/home')
-			.then((response) => response.json())
-			.then((res) => {
-				setCompanyDetails(res.rows);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
+		const getcompany = async () => {
+			await fetch('http://localhost:5000/home')
+				.then((response) => response.json())
+				.then((res) => {
+					setCompanyDetails(res.rows);
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		};
+		getcompany();
 	}, []);
 
 	const navigate_to_login = async (e) => {

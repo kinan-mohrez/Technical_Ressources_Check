@@ -19,7 +19,7 @@ import {
 	MDBCardBody,
 	MDBCard,
 } from 'mdb-react-ui-kit';
-import { Navigate, Route, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Profile from './Profile';
 
 export default function Login({ setCompany, setUser }) {
@@ -109,7 +109,7 @@ export default function Login({ setCompany, setUser }) {
 
 					if (res.company_login?.loggedIn === true) {
 						setCompany(res.company_login);
-						navigate('/company');
+						navigate('/information');
 					} else if (res.user_login?.loggedIn === true) {
 						setUser(res.user_login);
 						navigate('/home');
