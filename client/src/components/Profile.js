@@ -11,29 +11,38 @@ import { Rating } from 'react-simple-star-rating';
 
 export default function Profile({ company }) {
 	const [ratingCompany, setRatingCompany] = useState(0);
+	const [companyID, setcompanyID] = useState(localStorage.getItem('companyID'));
+	console.log(company);
 
 	useEffect(() => {
-		const getRate = async () => {
-			const company_rate = {
-				company_id: company.company_id,
+		if (company.company_id) {
+			const getRate = async () => {
+				const company_rate = {
+					company_id: company.company_id || companyID,
+				};
+				const requestOptions = {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify(company_rate),
+				};
+				await fetch('http://localhost:5000/companyrate', requestOptions)
+					.then((response) => response.json())
+					.then((res) => {
+						setRatingCompany(res.ratingCompany);
+						localStorage.setItem(
+							'companyID',
+							JSON.stringify(company.company_id)
+						);
+						setcompanyID(localStorage.getItem('companyID'));
+					})
+
+					.catch((error) => {
+						console.log(error);
+					});
 			};
-			const requestOptions = {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(company_rate),
-			};
-			await fetch('http://localhost:5000/companyrate', requestOptions)
-				.then((response) => response.json())
-				.then((res) => {
-					setRatingCompany(res.ratingCompany);
-					// console.log(res.ratingCompany.budget);
-				})
-				.catch((error) => {
-					console.log(error);
-				});
-		};
-		getRate();
-	}, [company.company_id]);
+			getRate();
+		}
+	}, [company?.company_id, company, companyID]);
 	console.log(ratingCompany);
 
 	return (
@@ -140,45 +149,54 @@ export default function Profile({ company }) {
 					<div className='l-cnt'>
 						<div className='cnt-label'>
 							<span>
-								<h2>4.82</h2>
+								<h2>
+									{ratingCompany?.allRating}
+									<sub>/10</sub>
+								</h2>
 							</span>
 						</div>
 						<div id='i-box'>
 							{
 								<Rating
 									allowHalfIcon={true}
-									ratingValue={ratingCompany?.budget} /* Available Props */
+									ratingValue={ratingCompany?.budget}
+									readonly={true} /* Available Props */
 								/>
 							}
+							<span>Budget</span>
 						</div>
 						<div id='i-box'>
 							{
 								<Rating
 									allowHalfIcon={true}
-									ratingValue={ratingCompany?.quality} /* Available Props */
+									ratingValue={ratingCompany?.quality}
+									readonly={true} /* Available Props */
 								/>
 							}
+							<span>Quality</span>
 						</div>
 						<div id='i-box'>
 							{
 								<Rating
 									allowHalfIcon={true}
-									ratingValue={ratingCompany?.deadlines} /* Available Props */
+									ratingValue={ratingCompany?.deadlines}
+									readonly={true} /* Available Props */
 								/>
 							}
+							<span>Deadlines</span>
 						</div>
 						<div id='i-box'>
 							{
 								<Rating
 									allowHalfIcon={true}
-									ratingValue={
-										ratingCompany?.collaboration
-									} /* Available Props */
+									ratingValue={ratingCompany?.collaboration}
+									readonly={true} /* Available Props */
 								/>
 							}
+							<span>Collaboration</span>
 						</div>
 						<p>
-							<u>11 ratings</u>
+							<u>{ratingCompany?.ratingNum} ratings</u>
 						</p>
 						<MDBBtn className='mb-4 btn-grad'>contact</MDBBtn>
 					</div>
@@ -186,33 +204,27 @@ export default function Profile({ company }) {
 				<div className='catagories'>
 					<div>
 						<i className='material-icons'>people</i>
-						{company.num_employees} Persons in Team
-						<i className='material-icons'>edit</i>
+						<strong>{company.num_employees}</strong> Persons in Team
 					</div>
 					<div>
 						<i className='material-icons'>flag</i>established{' '}
-						{company.founded_year}
-						<i className='material-icons'>edit</i>
+						<strong>{company.founded_year}</strong>
 					</div>
 					<div>
 						<i className='material-icons'>computer</i>works remotely{' '}
-						{company.remotely}
-						<i className='material-icons'>edit</i>
+						<strong>{company.remote}</strong>
 					</div>
 					<div>
 						<i className='material-icons'>language</i>languages{' '}
-						{company.languages}
-						<i className='material-icons'>edit</i>
+						<strong>{company.languages}</strong>
 					</div>
 					<div>
 						<i className='material-icons'>speed</i>
-						Respond Time {company.respond_time}
-						<i className='material-icons'>edit</i>
+						Respond Time <strong>{company.respond_time}</strong> hour
 					</div>
 					<div>
 						<i className='material-icons'>terminal</i>Accepts Test projects{' '}
-						{company.test_project}
-						<i className='material-icons'>edit</i>
+						<strong>{company.test_project ? 'Yes' : 'NO'}</strong>
 					</div>
 				</div>
 				<hr />

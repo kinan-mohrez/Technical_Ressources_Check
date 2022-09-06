@@ -7,6 +7,8 @@ import Home from './components/Home';
 import { useState } from 'react';
 import StarRating from './components/StarRating';
 import Done from './components/Done';
+import Companyinfo from './components/Companyinfo';
+import Thank from './components/Thank';
 
 function App() {
 	const [company, setCompany] = useState(null);
@@ -27,6 +29,11 @@ function App() {
 						path='/company'
 						element={<Profile company={company} />}
 					></Route>
+					<Route
+						path='/information'
+						element={<Companyinfo company={company} />}
+					></Route>
+					<Route path='/thank_you' element={<Thank />}></Route>
 					<Route path='*' element={<Home />}></Route>
 				</Routes>
 			</BrowserRouter>

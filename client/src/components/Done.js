@@ -42,7 +42,7 @@ export default function Done() {
 			</div>
 			<div className='App'>
 				<p>Share your private feedback with us</p>
-				<MDBTextArea label='' id='textAreaExample' rows={6} />
+				<MDBTextArea label='' id='textAreaExample' rows={6} cols={12} />
 			</div>
 			<div className='App'>
 				<MDBBtn className='mb-4 btn-grad'>submit</MDBBtn>

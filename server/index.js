@@ -180,12 +180,14 @@ app.post('/login', async (req, res) => {
 });
 
 app.get('/home', async (req, res) => {
-	const potentialLogin = await pool.query('SELECT * FROM companies');
+	const client = await pool.connect();
+	const potentialLogin = await client.query('SELECT * FROM companies');
 	if (potentialLogin.rowCount > 0) {
 		res.json(potentialLogin);
 	} else {
 		res.json({ errors: errors });
 	}
+	client.release();
 });
 
 app.post('/rating', async (req, res) => {
@@ -199,20 +201,91 @@ app.post('/rating', async (req, res) => {
 });
 
 app.post('/companyrate', async (req, res) => {
-	console.log(req.body.company_id);
-	const companyRating = await pool.query(
-		'SELECT * FROM evaluation WHERE company_id=$1',
+	const client = await pool.connect();
+
+	// console.log(req.body.company_id);
+	const companyRating = await client.query(
+		'SELECT  AVG(budget) AS avg_budget , AVG(quality) AS avg_quality,AVG(deadlines) AS avg_deadlines,AVG(collaboration) AS avg_collaboration FROM evaluation WHERE company_id=$1',
 		[req.body.company_id]
 	);
+
+	await client.query('SELECT * FROM evaluation ');
+
 	if (companyRating.rowCount > 0) {
+		console.log(companyRating.rowCount);
+
 		const ratingCompany = {
-			budget: companyRating.rows[0].budget,
-			quality: companyRating.rows[0].quality,
-			deadlines: companyRating.rows[0].deadlines,
-			collaboration: companyRating.rows[0].collaboration,
+			budget:
+				Math.round(parseFloat(companyRating.rows[0].avg_budget) / 10) * 10,
+			quality:
+				Math.round(parseFloat(companyRating.rows[0].avg_quality) / 10) * 10,
+			deadlines:
+				Math.round(parseFloat(companyRating.rows[0].avg_deadlines) / 10) * 10,
+			collaboration:
+				Math.round(parseFloat(companyRating.rows[0].avg_deadlines) / 10) * 10,
+			allRating:
+				Math.round(
+					(Math.round(parseFloat(companyRating.rows[0].avg_budget) / 10) * 10 +
+						Math.round(parseFloat(companyRating.rows[0].avg_quality) / 10) *
+							10 +
+						Math.round(parseFloat(companyRating.rows[0].avg_deadlines) / 10) *
+							10 +
+						Math.round(parseFloat(companyRating.rows[0].avg_deadlines) / 10) *
+							10) /
+						4
+				) / 10,
+			// ratingNum: numRating.rowCount,
 		};
 		res.json({ ratingCompany: ratingCompany });
+		// console.log(numRating.rowCount);
+	} else {
+		client.release();
 	}
+	client.release(true);
+});
+
+app.post('/info', async (req, res) => {
+	await pool
+		.query(
+			'UPDATE companies SET founded_year=$1, country=$2, city=$3, respond_time=$4, website=$5, category=$6, num_employees=$7, languages=$8, remote=$9, test_project=$10, description=$11, service=$12 WHERE company_id=$13 ;',
+			[
+				req.body.founded_year,
+				req.body.country,
+				req.body.city,
+				req.body.responseTime,
+				req.body.website,
+				req.body.categories,
+				req.body.teamSize,
+				req.body.languages,
+				req.body.remotly,
+				req.body.testProjects,
+				req.body.description,
+				req.body.service,
+				req.body.company_id,
+			]
+		)
+		.then((data) => res.status(201).json(data))
+		.catch((err) => res.send(err));
+
+	const infoCompany = {
+		company_id: req.body.company_id,
+		name: req.body.name,
+		email: req.body.email,
+		loggedIn: req.body.loggedIn,
+		founded_year: req.body.founded_year,
+		country: req.body.country,
+		city: req.body.city,
+		responseTime: req.body.responseTime,
+		website: req.body.website,
+		categories: req.body.categories,
+		teamSize: req.body.teamSize,
+		languages: req.body.languages,
+		remotly: req.body.remotly,
+		testProjects: req.body.testProjects,
+		description: req.body.description,
+		service: req.body.service,
+	};
+	console.log(infoCompany);
 });
 
 app.listen(port, () => {
