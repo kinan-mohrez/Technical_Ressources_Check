@@ -12,3 +12,6 @@
     height: 59px;
     margin: 0px 10px;
 }
+.hoverPointer :hover{
+   cursor: pointer;
+}

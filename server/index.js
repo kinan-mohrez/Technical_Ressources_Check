@@ -21,6 +21,7 @@ app.use(session(sess));
 //add new user
 
 app.post('/user', async (req, res) => {
+	const client = await pool.connect();
 	const {
 		first_name,
 		last_name,
@@ -51,24 +52,28 @@ app.post('/user', async (req, res) => {
 	if (password !== confirm_passsword) {
 		errors.push({ message: 'Passwords do not match' });
 	}
-
-	if (errors.length <= 0) {
-		pool
-			.query(
-				'INSERT INTO users ( first_name, last_name, user_name, email, password, image) VALUES ($1,$2,$3,$4,$5,$6) ;',
-				[first_name, last_name, user_name, email, hashedPassword, image]
-			)
-			.then((data) => res.status(201).json(data))
-			.then(res.json({ register: true }))
-			.catch((err) => console.log(err));
-	} else {
-		res.json({ register: false, errors: errors });
+	try {
+		if (errors.length <= 0) {
+			client
+				.query(
+					'INSERT INTO users ( first_name, last_name, user_name, email, password, image) VALUES ($1,$2,$3,$4,$5,$6) ;',
+					[first_name, last_name, user_name, email, hashedPassword, image]
+				)
+				.then((data) => res.status(201).json(data))
+				.then(res.json({ register: true }))
+				.catch((err) => console.log(err));
+		} else {
+			res.json({ register: false, errors: errors });
+		}
+	} finally {
+		client.release();
 	}
 });
 
 //add new company
 
 app.post('/company', async (req, res) => {
+	const client = await pool.connect();
 	const {
 		name,
 		email,
@@ -90,114 +95,143 @@ app.post('/company', async (req, res) => {
 	if (password !== confirm_passsword) {
 		errors.push({ message: 'Passwords do not match' });
 	}
-
-	if (errors.length <= 0) {
-		pool
-			.query(
-				'INSERT INTO companies (name, password, email ) VALUES ($1,$2,$3) ;',
-				[name, hashedPassword, email]
-			)
-			.then((data) => res.status(201).json(data))
-			.then(res.json({ register: true }))
-			.catch((err) => console.log(err));
-	} else {
-		res.json({ register: false, errors: errors });
+	try {
+		if (errors.length <= 0) {
+			client
+				.query(
+					'INSERT INTO companies (name, password, email ) VALUES ($1,$2,$3) ;',
+					[name, hashedPassword, email]
+				)
+				.then((data) => res.status(201).json(data))
+				.then(res.json({ register: true }))
+				.catch((err) => console.log(err));
+		} else {
+			res.json({ register: false, errors: errors });
+		}
+	} finally {
+		client.release();
 	}
 });
 
 app.post('/login', async (req, res) => {
+	const client = await pool.connect();
 	let errors = [];
 
-	const potentialLogin = await pool.query(
+	const potentialLogin = await client.query(
 		'SELECT * FROM companies WHERE email=$1',
 		[req.body.email]
 	);
-
-	if (potentialLogin.rowCount > 0) {
-		const isSamePass = await bcrypt.compare(
-			req.body.password,
-			potentialLogin.rows[0].password
-		);
-		if (isSamePass) {
-			req.session.company = {
-				loggedIn: true,
-				company_id: potentialLogin.rows[0].company_id,
-				description: potentialLogin.rows[0].description,
-				name: potentialLogin.rows[0].name,
-				company_id: potentialLogin.rows[0].company_id,
-				email: potentialLogin.rows[0].email,
-				country: potentialLogin.rows[0].country,
-				website: potentialLogin.rows[0].website,
-				num_employees: potentialLogin.rows[0].num_employees,
-				respond_time: potentialLogin.rows[0].respond_time,
-				founded_year: potentialLogin.rows[0].founded_year,
-				image: potentialLogin.rows[0].image,
-				category: potentialLogin.rows[0].category,
-				cover: potentialLogin.rows[0].cover,
-				languages: potentialLogin.rows[0].languages,
-				test_project: potentialLogin.rows[0].test_project,
-				city: potentialLogin.rows[0].city,
-				remote: potentialLogin.rows[0].remote,
-			};
-			console.log('Successful company login');
-
-			res.json({ company_login: req.session.company });
-		} else {
-			console.log('Wrong Password');
-			errors.push({ message: 'Wrong Password' });
-			res.json({ errors: errors });
-		}
-	} else {
-		const potentialLogin = await pool.query(
-			'SELECT * FROM users WHERE email=$1',
-			[req.body.email]
-		);
+	try {
 		if (potentialLogin.rowCount > 0) {
 			const isSamePass = await bcrypt.compare(
 				req.body.password,
 				potentialLogin.rows[0].password
 			);
 			if (isSamePass) {
-				req.session.user = {
+				req.session.company = {
 					loggedIn: true,
-					user_id: potentialLogin.rows[0].user_id,
-					first_name: potentialLogin.rows[0].first_name,
-					last_name: potentialLogin.rows[0].last_name,
-					user_name: potentialLogin.rows[0].user_name,
+					company_id: potentialLogin.rows[0].company_id,
+					description: potentialLogin.rows[0].description,
+					name: potentialLogin.rows[0].name,
+					company_id: potentialLogin.rows[0].company_id,
 					email: potentialLogin.rows[0].email,
+					country: potentialLogin.rows[0].country,
+					website: potentialLogin.rows[0].website,
+					num_employees: potentialLogin.rows[0].num_employees,
+					respond_time: potentialLogin.rows[0].respond_time,
+					founded_year: potentialLogin.rows[0].founded_year,
 					image: potentialLogin.rows[0].image,
+					category: potentialLogin.rows[0].category,
+					cover: potentialLogin.rows[0].cover,
+					languages: potentialLogin.rows[0].languages,
+					test_project: potentialLogin.rows[0].test_project,
+					city: potentialLogin.rows[0].city,
+					remote: potentialLogin.rows[0].remote,
 				};
-				console.log('Successful user login');
+				console.log('Successful company login');
 
-				res.json({ user_login: req.session.user });
+				res.json({ company_login: req.session.company });
+			} else {
+				console.log('Wrong Password');
+				errors.push({ message: 'Wrong Password' });
+				res.json({ errors: errors });
 			}
 		} else {
-			console.log('the Email is not correct');
-			errors.push({ message: 'The E-mail is not correct' });
-			res.json({ errors: errors });
+			const potentialLogin = await pool.query(
+				'SELECT * FROM users WHERE email=$1',
+				[req.body.email]
+			);
+			if (potentialLogin.rowCount > 0) {
+				const isSamePass = await bcrypt.compare(
+					req.body.password,
+					potentialLogin.rows[0].password
+				);
+				if (isSamePass) {
+					req.session.user = {
+						loggedIn: true,
+						user_id: potentialLogin.rows[0].user_id,
+						first_name: potentialLogin.rows[0].first_name,
+						last_name: potentialLogin.rows[0].last_name,
+						user_name: potentialLogin.rows[0].user_name,
+						email: potentialLogin.rows[0].email,
+						image: potentialLogin.rows[0].image,
+					};
+					console.log('Successful user login');
+
+					res.json({ user_login: req.session.user });
+				}
+			} else {
+				console.log('the Email is not correct');
+				errors.push({ message: 'The E-mail is not correct' });
+				res.json({ errors: errors });
+			}
 		}
+	} finally {
+		client.release();
 	}
 });
 
 app.get('/home', async (req, res) => {
 	const client = await pool.connect();
 	const potentialLogin = await client.query('SELECT * FROM companies');
-	if (potentialLogin.rowCount > 0) {
-		res.json(potentialLogin);
-	} else {
-		res.json({ errors: errors });
+	try {
+		if (potentialLogin.rowCount > 0) {
+			res.json(potentialLogin);
+		} else {
+			res.json({ errors: errors });
+		}
+	} finally {
+		client.release();
 	}
-	client.release();
 });
 
 app.post('/rating', async (req, res) => {
+	const client = await pool.connect();
+	client
+		.query(
+			'INSERT INTO evaluation ( budget, quality, deadlines, collaboration, company_id, user_id) VALUES ($1,$2,$3,$4,$5,$6) ;',
+			[
+				req.body.budget,
+				req.body.quality,
+				req.body.deadlines,
+				req.body.collaboration,
+				req.body?.company_id,
+				req.body?.user_id,
+			]
+		)
+		.then((data) => res.status(201).json(data))
+		.then(res.json({ register: true }))
+		.catch((err) => console.log(err));
 	const ratingCompany = {
 		budget: req.body.budget,
 		quality: req.body.quality,
 		deadlines: req.body.deadlines,
 		collaboration: req.body.collaboration,
+		company_id: req.body.company_id,
+		user_id: req.body.user_id,
 	};
 	console.log(ratingCompany);
+	client.release();
 });
 
 app.post('/companyrate', async (req, res) => {
@@ -209,39 +243,41 @@ app.post('/companyrate', async (req, res) => {
 		[req.body.company_id]
 	);
 
-	await client.query('SELECT * FROM evaluation ');
+	const numRating = await client.query('SELECT * FROM evaluation ');
 
-	if (companyRating.rowCount > 0) {
-		console.log(companyRating.rowCount);
+	try {
+		if (companyRating.rowCount > 0) {
+			// console.log(companyRating.rowCount + client.connect);
 
-		const ratingCompany = {
-			budget:
-				Math.round(parseFloat(companyRating.rows[0].avg_budget) / 10) * 10,
-			quality:
-				Math.round(parseFloat(companyRating.rows[0].avg_quality) / 10) * 10,
-			deadlines:
-				Math.round(parseFloat(companyRating.rows[0].avg_deadlines) / 10) * 10,
-			collaboration:
-				Math.round(parseFloat(companyRating.rows[0].avg_deadlines) / 10) * 10,
-			allRating:
-				Math.round(
-					(Math.round(parseFloat(companyRating.rows[0].avg_budget) / 10) * 10 +
-						Math.round(parseFloat(companyRating.rows[0].avg_quality) / 10) *
+			const ratingCompany = {
+				budget:
+					Math.round(parseFloat(companyRating.rows[0].avg_budget) / 10) * 10,
+				quality:
+					Math.round(parseFloat(companyRating.rows[0].avg_quality) / 10) * 10,
+				deadlines:
+					Math.round(parseFloat(companyRating.rows[0].avg_deadlines) / 10) * 10,
+				collaboration:
+					Math.round(parseFloat(companyRating.rows[0].avg_deadlines) / 10) * 10,
+				allRating:
+					Math.round(
+						(Math.round(parseFloat(companyRating.rows[0].avg_budget) / 10) *
 							10 +
-						Math.round(parseFloat(companyRating.rows[0].avg_deadlines) / 10) *
-							10 +
-						Math.round(parseFloat(companyRating.rows[0].avg_deadlines) / 10) *
-							10) /
-						4
-				) / 10,
-			// ratingNum: numRating.rowCount,
-		};
-		res.json({ ratingCompany: ratingCompany });
-		// console.log(numRating.rowCount);
-	} else {
+							Math.round(parseFloat(companyRating.rows[0].avg_quality) / 10) *
+								10 +
+							Math.round(parseFloat(companyRating.rows[0].avg_deadlines) / 10) *
+								10 +
+							Math.round(parseFloat(companyRating.rows[0].avg_deadlines) / 10) *
+								10) /
+							4
+					) / 10,
+				ratingNum: numRating.rowCount,
+			};
+			res.json({ ratingCompany: ratingCompany });
+			// console.log(numRating.rowCount);
+		}
+	} finally {
 		client.release();
 	}
-	client.release(true);
 });
 
 app.post('/info', async (req, res) => {

@@ -2,8 +2,14 @@ import React from 'react';
 import party from '../images/party_popper.png';
 import '../style/done.css';
 import { MDBBtn, MDBRadio, MDBTextArea } from 'mdb-react-ui-kit';
+import { useNavigate } from 'react-router-dom';
 
-export default function Done() {
+export default function Done({ user }) {
+	const navigate = useNavigate();
+	const goToHomegPage = (event) => {
+		event.preventDefault();
+		navigate('/home');
+	};
 	return (
 		<main>
 			<header>
@@ -45,7 +51,9 @@ export default function Done() {
 				<MDBTextArea label='' id='textAreaExample' rows={6} cols={12} />
 			</div>
 			<div className='App'>
-				<MDBBtn className='mb-4 btn-grad'>submit</MDBBtn>
+				<MDBBtn className='mb-4 btn-grad' onClick={goToHomegPage}>
+					submit
+				</MDBBtn>
 			</div>
 		</main>
 	);

@@ -8,11 +8,13 @@ import profileImage from '../images/sample-logo.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { MDBBtn } from 'mdb-react-ui-kit';
 import { Rating } from 'react-simple-star-rating';
+import { useNavigate } from 'react-router-dom';
 
 export default function Profile({ company }) {
 	const [ratingCompany, setRatingCompany] = useState(0);
 	const [companyID, setcompanyID] = useState(localStorage.getItem('companyID'));
 	console.log(company);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (company.company_id) {
@@ -44,6 +46,10 @@ export default function Profile({ company }) {
 		}
 	}, [company?.company_id, company, companyID]);
 	console.log(ratingCompany);
+	const goToRatingPage = (event) => {
+		event.preventDefault();
+		navigate('/rating');
+	};
 
 	return (
 		<main>
@@ -300,7 +306,9 @@ export default function Profile({ company }) {
 						<div className='td' id='l-col'>
 							<div className='l-cnt'>
 								<div className='cnt-label'>
-									<MDBBtn className='mb-4 btn-grad'>evaluate</MDBBtn>
+									<MDBBtn className='mb-4 btn-grad' onClick={goToRatingPage}>
+										evaluate
+									</MDBBtn>
 								</div>
 							</div>
 						</div>

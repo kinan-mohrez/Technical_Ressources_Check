@@ -4,12 +4,14 @@ import { MDBBtn } from 'mdb-react-ui-kit';
 import '../style/starRating.css';
 import { useNavigate } from 'react-router-dom';
 
-export default function StarRating() {
+export default function StarRating({ company, user }) {
 	const [budget, setBudget] = useState(0);
 	const [quality, setQuality] = useState(0);
 	const [deadlines, setDeadlines] = useState(0);
 	const [collaboration, setCollaboration] = useState(0); // initial rating value
 	const navigate = useNavigate();
+	console.log(company.company_id);
+	console.log(company.user_id);
 
 	// Catch Rating value
 	const handleBudget = (rate) => {
@@ -38,6 +40,8 @@ export default function StarRating() {
 				quality: quality,
 				deadlines: deadlines,
 				collaboration: collaboration,
+				company_id: company?.company_id,
+				user_id: user?.user_id,
 			};
 			const requestOptions = {
 				method: 'POST',
@@ -63,7 +67,7 @@ export default function StarRating() {
 			<form onSubmit={onSubmitRatingForm}>
 				<div className='App'>
 					<div>
-						<h1>Share your opinion about XXXX on TRC! </h1>
+						<h1>Share your opinion about {company.name} on TRC! </h1>
 						<h5>Give a rating and help others make the right choice</h5>
 					</div>
 				</div>

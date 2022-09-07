@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import '../style/company_details.css';
+import '../style/companies.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
 import { Rating } from 'react-simple-star-rating';
+import { useNavigate } from 'react-router-dom';
 
 export default function Companies({ company_details }) {
 	const [rating, setrating] = useState(['']);
 	// console.log(company_details);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		const getRate = async () => {
@@ -30,6 +33,10 @@ export default function Companies({ company_details }) {
 		};
 		getRate();
 	}, [company_details.company_id]);
+	const goToCompanygPage = (event) => {
+		event.preventDefault();
+		navigate('/company');
+	};
 
 	return (
 		<div className='container'>
@@ -40,7 +47,9 @@ export default function Companies({ company_details }) {
 					</div>
 				</div>
 				<div className='td'>
-					<h4>{company_details.name}</h4>
+					<h3 className='hoverPointer' onClick={goToCompanygPage}>
+						{company_details.name}
+					</h3>
 					<a href={company_details.website}>
 						<Button variant='primary'>website</Button>
 					</a>

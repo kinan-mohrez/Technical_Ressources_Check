@@ -17,10 +17,19 @@ function App() {
 		<div className='container'>
 			<BrowserRouter>
 				<Routes>
-					<Route path='/' element={<Home />}></Route>
-					<Route path='/home' element={<Home user={user} />}></Route>
-					<Route path='/rating' element={<StarRating />}></Route>
-					<Route path='/done' element={<Done />}></Route>
+					<Route
+						path='/'
+						element={<Home company={company} user={user} />}
+					></Route>
+					<Route
+						path='/home'
+						element={<Home company={company} user={user} />}
+					></Route>
+					<Route
+						path='/rating'
+						element={<StarRating company={company} user={user} />}
+					></Route>
+					<Route path='/done' element={<Done user={user} />}></Route>
 					<Route
 						path='/login'
 						element={<Login setCompany={setCompany} setUser={setUser} />}
@@ -34,7 +43,10 @@ function App() {
 						element={<Companyinfo company={company} />}
 					></Route>
 					<Route path='/thank_you' element={<Thank />}></Route>
-					<Route path='*' element={<Home />}></Route>
+					<Route
+						path='*'
+						element={<Home company={company} user={user} />}
+					></Route>
 				</Routes>
 			</BrowserRouter>
 		</div>
