@@ -22,7 +22,7 @@ import Companies from './Companies';
 import ShowMore from 'react-show-more-list';
 import { useNavigate } from 'react-router-dom';
 
-export default function Home({ user }) {
+export default function Home({ company, user }) {
 	const [companyDetails, setCompanyDetails] = useState(['']);
 	const navigate = useNavigate();
 
@@ -126,7 +126,12 @@ export default function Home({ user }) {
 				</div>
 				<div className='coloumn'>
 					{companyDetails.slice(0, visible).map((com, index) => (
-						<Companies key={index} company_details={com} />
+						<Companies
+							key={index}
+							company_details={com}
+							company={company}
+							user={user}
+						/>
 					))}
 					{visible < companyDetails.length && (
 						<button onClick={loadMore}>
