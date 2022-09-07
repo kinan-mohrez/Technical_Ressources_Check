@@ -234,6 +234,78 @@ export default function Profile({ company }) {
 					</div>
 					<h5>{company.description}</h5>
 				</div>
+				<div className='App'>
+					<span>
+						<h2>
+							{ratingCompany?.allRating}
+							<sub>/10</sub>
+						</h2>
+					</span>
+					<div id='i-box'>
+						{
+							<Rating
+								allowHalfIcon={true}
+								ratingValue={ratingCompany?.budget}
+								readonly={true} /* Available Props */
+							/>
+						}
+						<span>Budget</span>
+					</div>
+					<div id='i-box'>
+						{
+							<Rating
+								allowHalfIcon={true}
+								ratingValue={ratingCompany?.quality}
+								readonly={true} /* Available Props */
+							/>
+						}
+						<span>Quality</span>
+					</div>
+					<div id='i-box'>
+						{
+							<Rating
+								allowHalfIcon={true}
+								ratingValue={ratingCompany?.deadlines}
+								readonly={true} /* Available Props */
+							/>
+						}
+						<span>Deadlines</span>
+					</div>
+					<div id='i-box'>
+						{
+							<Rating
+								allowHalfIcon={true}
+								ratingValue={ratingCompany?.collaboration}
+								readonly={true} /* Available Props */
+							/>
+						}
+						<span>Collaboration</span>
+					</div>
+					<p>
+						<u>{ratingCompany?.ratingNum} ratings</u>
+					</p>
+					<div className='tb'>
+						<div className='td' id='l-col'>
+							<div className='l-cnt'>
+								<div className='cnt-label'>
+									<span>
+										<p>Have you worked with {company.name} ?</p>
+										<p>share your experience with us </p>
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div className='tb'>
+						<div className='td' id='l-col'>
+							<div className='l-cnt'>
+								<div className='cnt-label'>
+									<MDBBtn className='mb-4 btn-grad'>evaluate</MDBBtn>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</main>
 	);
