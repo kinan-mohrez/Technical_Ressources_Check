@@ -11,7 +11,7 @@ export default function StarRating({ company, user }) {
 	const [collaboration, setCollaboration] = useState(0); // initial rating value
 	const navigate = useNavigate();
 	console.log(company.company_id);
-	console.log(company.user_id);
+	console.log(user.user_id);
 
 	// Catch Rating value
 	const handleBudget = (rate) => {

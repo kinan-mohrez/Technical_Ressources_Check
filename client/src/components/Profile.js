@@ -292,24 +292,30 @@ export default function Profile({ company, setCompany, user }) {
 						<u>{ratingCompany?.ratingNum} ratings</u>
 					</p>
 					{user && (
-						<div className='tb'>
-							<div className='td' id='l-col'>
-								<div className='l-cnt'>
-									<div className='cnt-label'>
-										<span>
-											<p>Have you worked with {company.name} ?</p>
-											<p>share your experience with us </p>
-										</span>
+						<div>
+							<div className='tb'>
+								<div className='td' id='l-col'>
+									<div className='l-cnt'>
+										<div className='cnt-label'>
+											<span>
+												<p>Have you worked with {company.name} ?</p>
+												<p>share your experience with us </p>
+											</span>
+										</div>
 									</div>
 								</div>
 							</div>
-
-							<div className='td' id='l-col'>
-								<div className='l-cnt'>
-									<div className='cnt-label'>
-										<MDBBtn className='mb-4 btn-grad' onClick={goToRatingPage}>
-											evaluate
-										</MDBBtn>
+							<div className='tb'>
+								<div className='td' id='l-col'>
+									<div className='l-cnt'>
+										<div className='cnt-label'>
+											<MDBBtn
+												className='mb-4 btn-grad'
+												onClick={goToRatingPage}
+											>
+												evaluate
+											</MDBBtn>
+										</div>
 									</div>
 								</div>
 							</div>

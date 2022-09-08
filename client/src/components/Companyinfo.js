@@ -71,7 +71,7 @@ export default function Companyinfo({ company }) {
 					.then((response) => response.json())
 					.then((res) => {
 						console.log(res);
-						navigate('/thank_you');
+						navigate('/upload');
 					});
 			} catch (err) {
 				console.error(err.message);
@@ -374,7 +374,7 @@ export default function Companyinfo({ company }) {
 							</Form.Group>
 						</div>
 					</div>
-					<div className='tb'>
+					{/* <div className='tb'>
 						<div className='l-cnt'>
 							<div className='cnt-label'></div>
 							<div className='mb-4 row'>
@@ -384,7 +384,6 @@ export default function Companyinfo({ company }) {
 										type='file'
 										style={{ width: '80%' }}
 										name='image'
-										onChange={seeimage}
 									/>
 								</Form.Group>
 
@@ -394,12 +393,11 @@ export default function Companyinfo({ company }) {
 										type='file'
 										style={{ width: '80%' }}
 										name='cover'
-										onChange={seecover}
 									/>
 								</Form.Group>
 							</div>
 						</div>
-					</div>
+					</div> */}
 
 					<div className='buton_center'>
 						<MDBBtn
