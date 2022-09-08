@@ -22,7 +22,7 @@ import Companies from './Companies';
 import ShowMore from 'react-show-more-list';
 import { useNavigate } from 'react-router-dom';
 
-export default function Home({ company, user }) {
+export default function Home({ company, user, setCompany, setUser }) {
 	const [companyDetails, setCompanyDetails] = useState(['']);
 	const navigate = useNavigate();
 
@@ -45,7 +45,16 @@ export default function Home({ company, user }) {
 	}, []);
 
 	const navigate_to_login = async (e) => {
-		navigate('/login');
+		// navigate('/login');
+		if (e.target.innerText === 'LOGIN') {
+			console.log(e.target.innerText);
+			navigate('/login');
+		}
+		if (e.target.innerText === 'LOGOUT') {
+			setUser(null);
+			console.log(e.target.innerText);
+			navigate('/login');
+		}
 	};
 	return (
 		<main>
@@ -131,6 +140,7 @@ export default function Home({ company, user }) {
 							company_details={com}
 							company={company}
 							user={user}
+							setCompany={setCompany}
 						/>
 					))}
 					{visible < companyDetails.length && (

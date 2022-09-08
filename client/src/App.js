@@ -19,11 +19,25 @@ function App() {
 				<Routes>
 					<Route
 						path='/'
-						element={<Home company={company} user={user} />}
+						element={
+							<Home
+								company={company}
+								user={user}
+								setCompany={setCompany}
+								setUser={setUser}
+							/>
+						}
 					></Route>
 					<Route
 						path='/home'
-						element={<Home company={company} user={user} />}
+						element={
+							<Home
+								company={company}
+								user={user}
+								setCompany={setCompany}
+								setUser={setUser}
+							/>
+						}
 					></Route>
 					<Route
 						path='/rating'
@@ -36,7 +50,9 @@ function App() {
 					></Route>
 					<Route
 						path='/company'
-						element={<Profile company={company} />}
+						element={
+							<Profile company={company} setCompany={setCompany} user={user} />
+						}
 					></Route>
 					<Route
 						path='/information'
@@ -45,7 +61,14 @@ function App() {
 					<Route path='/thank_you' element={<Thank />}></Route>
 					<Route
 						path='*'
-						element={<Home company={company} user={user} />}
+						element={
+							<Home
+								company={company}
+								user={user}
+								setCompany={setCompany}
+								setUser={setUser}
+							/>
+						}
 					></Route>
 				</Routes>
 			</BrowserRouter>
