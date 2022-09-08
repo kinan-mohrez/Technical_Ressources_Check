@@ -4,11 +4,13 @@ const bcrypt = require('bcrypt');
 const port = process.env.PORT || 5000;
 const pool = require('./db');
 var session = require('express-session');
+const fileUpload = require('express-fileupload');
 
 var cors = require('cors');
 //middleware
 app.use(cors());
 app.use(express.json());
+app.use(fileUpload());
 
 //Routes
 
@@ -243,7 +245,10 @@ app.post('/companyrate', async (req, res) => {
 		[req.body.company_id]
 	);
 
-	const numRating = await client.query('SELECT * FROM evaluation ');
+	const numRating = await client.query(
+		'SELECT * FROM evaluation WHERE company_id=$1',
+		[req.body.company_id]
+	);
 
 	try {
 		if (companyRating.rowCount > 0) {
@@ -281,7 +286,8 @@ app.post('/companyrate', async (req, res) => {
 });
 
 app.post('/info', async (req, res) => {
-	await pool
+	const client = await pool.connect();
+	await client
 		.query(
 			'UPDATE companies SET founded_year=$1, country=$2, city=$3, respond_time=$4, website=$5, category=$6, num_employees=$7, languages=$8, remote=$9, test_project=$10, description=$11, service=$12 WHERE company_id=$13 ;',
 			[
@@ -297,6 +303,7 @@ app.post('/info', async (req, res) => {
 				req.body.testProjects,
 				req.body.description,
 				req.body.service,
+
 				req.body.company_id,
 			]
 		)
@@ -322,6 +329,7 @@ app.post('/info', async (req, res) => {
 		service: req.body.service,
 	};
 	console.log(infoCompany);
+	client.release();
 });
 
 app.listen(port, () => {

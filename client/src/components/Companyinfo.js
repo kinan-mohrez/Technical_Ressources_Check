@@ -29,6 +29,8 @@ export default function Companyinfo({ company }) {
 	const [region, setRegion] = useState('');
 	const [remotly, setRemotly] = useState('');
 	const [testProjects, setTestProjects] = useState(false);
+	const [image, setImage] = useState({ preview: '', data: '' });
+	const [cover, setCover] = useState({ preview: '', data: '' });
 	console.log(company);
 
 	const handleSubmit = async (event) => {
@@ -40,6 +42,7 @@ export default function Companyinfo({ company }) {
 		setValidated(true);
 		if (form.checkValidity() === true) {
 			event.preventDefault();
+
 			try {
 				const Companyinformations = {
 					company_id: company.company_id,
@@ -377,12 +380,22 @@ export default function Companyinfo({ company }) {
 							<div className='mb-4 row'>
 								<Form.Group controlId='formFile' className='mb-4'>
 									<Form.Label>Upload your logo</Form.Label>
-									<Form.Control type='file' style={{ width: '80%' }} />
+									<Form.Control
+										type='file'
+										style={{ width: '80%' }}
+										name='image'
+										onChange={seeimage}
+									/>
 								</Form.Group>
 
 								<Form.Group controlId='formFile' className='mb-4'>
 									<Form.Label>Upload your cover</Form.Label>
-									<Form.Control type='file' style={{ width: '80%' }} />
+									<Form.Control
+										type='file'
+										style={{ width: '80%' }}
+										name='cover'
+										onChange={seecover}
+									/>
 								</Form.Group>
 							</div>
 						</div>

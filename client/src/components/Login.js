@@ -28,6 +28,8 @@ export default function Login({ setCompany, setUser }) {
 	const [errorCompany, setErrorCompany] = useState(['']);
 	const [errorUser, setErrorUser] = useState(['']);
 	const navigate = useNavigate();
+	setCompany(null);
+	setUser(null);
 
 	const onSubmitUserForm = async (e) => {
 		e.preventDefault();

@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import { Rating } from 'react-simple-star-rating';
 import { useNavigate } from 'react-router-dom';
 
-export default function Companies({ company_details }) {
+export default function Companies({ company_details, setCompany }) {
 	const [rating, setrating] = useState(['']);
 	// console.log(company_details);
 	const navigate = useNavigate();
@@ -25,7 +25,7 @@ export default function Companies({ company_details }) {
 				.then((response) => response.json())
 				.then((res) => {
 					setrating(res.ratingCompany);
-					console.log(res);
+					// console.log(res);
 				})
 				.catch((error) => {
 					console.log(error);
@@ -33,8 +33,11 @@ export default function Companies({ company_details }) {
 		};
 		getRate();
 	}, [company_details.company_id]);
+
 	const goToCompanygPage = (event) => {
 		event.preventDefault();
+		console.log(company_details);
+		setCompany(company_details);
 		navigate('/company');
 	};
 

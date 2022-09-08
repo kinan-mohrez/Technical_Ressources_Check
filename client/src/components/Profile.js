@@ -10,10 +10,10 @@ import { MDBBtn } from 'mdb-react-ui-kit';
 import { Rating } from 'react-simple-star-rating';
 import { useNavigate } from 'react-router-dom';
 
-export default function Profile({ company }) {
+export default function Profile({ company, setCompany, user }) {
 	const [ratingCompany, setRatingCompany] = useState(0);
 	const [companyID, setcompanyID] = useState(localStorage.getItem('companyID'));
-	console.log(company);
+	// console.log(company);
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -45,7 +45,8 @@ export default function Profile({ company }) {
 			getRate();
 		}
 	}, [company?.company_id, company, companyID]);
-	console.log(ratingCompany);
+	// console.log(ratingCompany);
+
 	const goToRatingPage = (event) => {
 		event.preventDefault();
 		navigate('/rating');
@@ -290,29 +291,30 @@ export default function Profile({ company }) {
 					<p>
 						<u>{ratingCompany?.ratingNum} ratings</u>
 					</p>
-					<div className='tb'>
-						<div className='td' id='l-col'>
-							<div className='l-cnt'>
-								<div className='cnt-label'>
-									<span>
-										<p>Have you worked with {company.name} ?</p>
-										<p>share your experience with us </p>
-									</span>
+					{user && (
+						<div className='tb'>
+							<div className='td' id='l-col'>
+								<div className='l-cnt'>
+									<div className='cnt-label'>
+										<span>
+											<p>Have you worked with {company.name} ?</p>
+											<p>share your experience with us </p>
+										</span>
+									</div>
+								</div>
+							</div>
+
+							<div className='td' id='l-col'>
+								<div className='l-cnt'>
+									<div className='cnt-label'>
+										<MDBBtn className='mb-4 btn-grad' onClick={goToRatingPage}>
+											evaluate
+										</MDBBtn>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-					<div className='tb'>
-						<div className='td' id='l-col'>
-							<div className='l-cnt'>
-								<div className='cnt-label'>
-									<MDBBtn className='mb-4 btn-grad' onClick={goToRatingPage}>
-										evaluate
-									</MDBBtn>
-								</div>
-							</div>
-						</div>
-					</div>
+					)}
 				</div>
 			</div>
 		</main>
