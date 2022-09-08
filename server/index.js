@@ -332,6 +332,21 @@ app.post('/info', async (req, res) => {
 	client.release();
 });
 
+app.post('/upload/:id', async (req, res) => {
+	console.log(req.params.id);
+	const client = await pool.connect();
+	await client
+		.query('UPDATE companies SET image=$1, cover=$2 WHERE company_id=$3 ;', [
+			req.files.image.data,
+			req.files.cover.data,
+			req.params.id,
+		])
+		.then((data) => res.status(201).json(data))
+		.catch((err) => res.send(err));
+
+	client.release();
+});
+
 app.listen(port, () => {
 	console.log(`app listening on port ${port}`);
 });

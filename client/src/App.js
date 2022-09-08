@@ -9,6 +9,7 @@ import StarRating from './components/StarRating';
 import Done from './components/Done';
 import Companyinfo from './components/Companyinfo';
 import Thank from './components/Thank';
+import Upload from './components/Upload';
 
 function App() {
 	const [company, setCompany] = useState(null);
@@ -43,7 +44,10 @@ function App() {
 						path='/rating'
 						element={<StarRating company={company} user={user} />}
 					></Route>
-					<Route path='/done' element={<Done user={user} />}></Route>
+					<Route
+						path='/done'
+						element={<Done user={user} company={company} />}
+					></Route>
 					<Route
 						path='/login'
 						element={<Login setCompany={setCompany} setUser={setUser} />}
@@ -58,7 +62,14 @@ function App() {
 						path='/information'
 						element={<Companyinfo company={company} />}
 					></Route>
-					<Route path='/thank_you' element={<Thank />}></Route>
+					<Route
+						path='/thank_you'
+						element={<Thank company={company} />}
+					></Route>
+					<Route
+						path='/upload'
+						element={<Upload company={company} setCompany={setCompany} />}
+					></Route>
 					<Route
 						path='*'
 						element={
