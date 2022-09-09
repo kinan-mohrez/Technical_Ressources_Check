@@ -291,7 +291,7 @@ export default function Profile({ company, setCompany, user }) {
 					<p>
 						<u>{ratingCompany?.ratingNum} ratings</u>
 					</p>
-					{user && (
+					
 						<div>
 							<div className='tb'>
 								<div className='td' id='l-col'>
@@ -320,7 +320,7 @@ export default function Profile({ company, setCompany, user }) {
 								</div>
 							</div>
 						</div>
-					)}
+					
 				</div>
 			</div>
 		</main>
