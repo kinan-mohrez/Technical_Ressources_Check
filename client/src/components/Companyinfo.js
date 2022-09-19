@@ -16,7 +16,7 @@ import {
 } from 'react-country-region-selector';
 import { useNavigate } from 'react-router-dom';
 
-export default function Companyinfo({ company }) {
+export default function Companyinfo({ company, setCompany }) {
 	const navigate = useNavigate();
 	useEffect(() => {
 		if (company?.website) {
@@ -31,7 +31,7 @@ export default function Companyinfo({ company }) {
 	const [testProjects, setTestProjects] = useState(false);
 	const [image, setImage] = useState({ preview: '', data: '' });
 	const [cover, setCover] = useState({ preview: '', data: '' });
-	console.log(company);
+	// console.log(company);
 
 	const handleSubmit = async (event) => {
 		const form = event.currentTarget;
@@ -67,12 +67,13 @@ export default function Companyinfo({ company }) {
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify(Companyinformations),
 				};
-				await fetch('http://localhost:5000/info', requestOptions)
-					.then((response) => response.json())
-					.then((res) => {
-						console.log(res);
+				await fetch('http://localhost:5000/info', requestOptions).then(
+					(res) => {
+						// setCompany(res);
+						// console.log(res);
 						navigate('/upload');
-					});
+					}
+				);
 			} catch (err) {
 				console.error(err.message);
 			}
@@ -91,8 +92,9 @@ export default function Companyinfo({ company }) {
 							<Row className='mb-3'>
 								<Form.Group as={Col} md='5'>
 									<Form.Label>Country</Form.Label>
-									<Form.Select type='text' placeholder='Country'></Form.Select>
+									{/* <Form.Select type='text' placeholder='Country'></Form.Select> */}
 									<CountryDropdown
+										className='CountryDropdown'
 										value={country}
 										onChange={(val) => setCountry(val)}
 									/>
@@ -124,12 +126,13 @@ export default function Companyinfo({ company }) {
 								<Form.Group as={Col} md='5'>
 									{/* controlId='validationCustom03' */}
 									<Form.Label>City</Form.Label>
-									<Form.Select
+									{/* <Form.Select
 										type='select'
 										placeholder='Country'
 										name='City'
-									></Form.Select>
+									></Form.Select> */}
 									<RegionDropdown
+										className='CountryDropdown'
 										country={country}
 										value={region}
 										onChange={(val) => setRegion(val)}
@@ -374,37 +377,13 @@ export default function Companyinfo({ company }) {
 							</Form.Group>
 						</div>
 					</div>
-					{/* <div className='tb'>
-						<div className='l-cnt'>
-							<div className='cnt-label'></div>
-							<div className='mb-4 row'>
-								<Form.Group controlId='formFile' className='mb-4'>
-									<Form.Label>Upload your logo</Form.Label>
-									<Form.Control
-										type='file'
-										style={{ width: '80%' }}
-										name='image'
-									/>
-								</Form.Group>
-
-								<Form.Group controlId='formFile' className='mb-4'>
-									<Form.Label>Upload your cover</Form.Label>
-									<Form.Control
-										type='file'
-										style={{ width: '80%' }}
-										name='cover'
-									/>
-								</Form.Group>
-							</div>
-						</div>
-					</div> */}
 
 					<div className='buton_center'>
 						<MDBBtn
 							className='mb-4 w-25
                          btn-grad'
 						>
-							Done
+							next
 						</MDBBtn>
 					</div>
 				</Form>

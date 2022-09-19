@@ -107,7 +107,7 @@ export default function Login({ setCompany, setUser }) {
 			await fetch('http://localhost:5000/login', requestOptions)
 				.then((response) => response.json())
 				.then((res) => {
-					console.log(res);
+					// console.log(res);
 
 					if (res.company_login?.loggedIn === true) {
 						setCompany(res.company_login);

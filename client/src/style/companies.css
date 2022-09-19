@@ -1,3 +1,10 @@
 .hoverPointer :hover{
    cursor: pointer;
 }
+.info{
+width: 10px;
+}
+.icon{
+   margin: 0;
+   padding: 0;
+}

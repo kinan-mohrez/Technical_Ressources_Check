@@ -4,11 +4,32 @@ import '../style/done.css';
 import { MDBBtn } from 'mdb-react-ui-kit';
 import { useNavigate } from 'react-router-dom';
 
-export default function Thank({ company }) {
+export default function Thank({ company, setCompany }) {
 	const navigate = useNavigate();
+	// console.log(company);
 
 	const goToprofilegPage = (event) => {
 		event.preventDefault();
+		const getInfo = async () => {
+			const company_information = {
+				company_id: company.company_id,
+			};
+			const requestOptions = {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(company_information),
+			};
+			await fetch('http://localhost:5000/viewProfile', requestOptions)
+				.then((response) => response.json())
+				.then(async (res) => {
+					// console.log(res.rows[0]);
+					setCompany(res.rows[0]);
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		};
+		getInfo();
 		navigate('/company');
 	};
 
