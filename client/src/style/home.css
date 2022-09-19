@@ -69,4 +69,9 @@ main {
 .coloumn{
   column-count: 2;
   list-style: decimal;
+  transition: 1.5s;
+}
+.seeMore{
+  text-align: center;
+  margin-top: 60px;
 }

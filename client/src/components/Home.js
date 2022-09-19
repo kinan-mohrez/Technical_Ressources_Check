@@ -47,12 +47,12 @@ export default function Home({ company, user, setCompany, setUser }) {
 	const navigate_to_login = async (e) => {
 		// navigate('/login');
 		if (e.target.innerText === 'LOGIN') {
-			console.log(e.target.innerText);
+			// console.log(e.target.innerText);
 			navigate('/login');
 		}
 		if (e.target.innerText === 'LOGOUT') {
 			setUser(null);
-			console.log(e.target.innerText);
+			// console.log(e.target.innerText);
 			navigate('/login');
 		}
 	};
@@ -72,7 +72,7 @@ export default function Home({ company, user, setCompany, setUser }) {
 						</form>
 					</div>
 					<div className='td' id='f-name-l'>
-						<MDBBtn className='mb-4 w-100 btn-grad' onClick={navigate_to_login}>
+						<MDBBtn className='mb-6 w-100 btn-grad' onClick={navigate_to_login}>
 							{user?.loggedIn ? 'logout' : 'login'}
 						</MDBBtn>
 					</div>
@@ -124,7 +124,7 @@ export default function Home({ company, user, setCompany, setUser }) {
 							placeholder='Search for skills, company, region or category...'
 						/>
 						<button type='submit '>
-							<i className='material-icons'>search</i>
+							<i className='material-icons '>search</i>
 						</button>
 					</form>
 
@@ -143,10 +143,13 @@ export default function Home({ company, user, setCompany, setUser }) {
 							setCompany={setCompany}
 						/>
 					))}
+				</div>
+				<div className='seeMore'>
 					{visible < companyDetails.length && (
-						<button onClick={loadMore}>
+						<MDBBtn className='mb-6 w-20 btn-grad' onClick={loadMore}>
+							load more Companies <br />
 							<i className='material-icons'>arrow_drop_down</i>
-						</button>
+						</MDBBtn>
 					)}
 				</div>
 			</div>

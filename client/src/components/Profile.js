@@ -4,16 +4,20 @@ import 'material-icons/iconfont/material-icons.css';
 import 'material-icons/iconfont/filled.css';
 import 'material-icons/iconfont/outlined.css';
 import waves from '../images/waves.jpg';
+import noCover from '../images/No_Cover.jpg';
 import profileImage from '../images/sample-logo.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { MDBBtn } from 'mdb-react-ui-kit';
 import { Rating } from 'react-simple-star-rating';
+import noImage from '../images/No_image_available.png';
 import { useNavigate } from 'react-router-dom';
 
 export default function Profile({ company, setCompany, user }) {
 	const [ratingCompany, setRatingCompany] = useState(0);
 	const [companyID, setcompanyID] = useState(localStorage.getItem('companyID'));
-	// console.log(company);
+	const [imageData, setimageData] = useState([null]);
+	const [coverData, setCoverData] = useState([null]);
+	// console.log(company.image.data);
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -29,8 +33,16 @@ export default function Profile({ company, setCompany, user }) {
 				};
 				await fetch('http://localhost:5000/companyrate', requestOptions)
 					.then((response) => response.json())
-					.then((res) => {
+					.then(async (res) => {
 						setRatingCompany(res.ratingCompany);
+						const base64StringImage = btoa(
+							String.fromCharCode(...new Uint8Array(company.image.data))
+						);
+						setimageData(base64StringImage);
+						const base64StringCover = btoa(
+							String.fromCharCode(...new Uint8Array(company.cover.data))
+						);
+						setCoverData(base64StringCover);
 						localStorage.setItem(
 							'companyID',
 							JSON.stringify(company.company_id)
@@ -45,7 +57,7 @@ export default function Profile({ company, setCompany, user }) {
 			getRate();
 		}
 	}, [company?.company_id, company, companyID]);
-	// console.log(ratingCompany);
+	// console.log(imageData);
 
 	const goToRatingPage = (event) => {
 		event.preventDefault();
@@ -75,8 +87,12 @@ export default function Profile({ company, setCompany, user }) {
 							<div className='td'>
 								<a href='#' id='p-link'>
 									<img
-										src='https://imagizer.imageshack.com/img921/3072/rqkhIb.jpg'
-										alt='profile_image'
+										src={
+											company?.image !== null
+												? `data:image/png;base64,${imageData}`
+												: noImage
+										}
+										alt='company_image'
 									/>
 								</a>
 							</div>
@@ -84,14 +100,27 @@ export default function Profile({ company, setCompany, user }) {
 					</div>
 				</div>
 			</header>
-
 			<div id='profile-upper'>
 				<div id='profile-banner-image'>
-					<img src={waves} alt='profile' />
+					<img
+						src={
+							company?.cover !== null
+								? `data:image/png;base64,${coverData}`
+								: noCover
+						}
+						alt='profile'
+					/>
 				</div>
 				<div id='profile-d'>
 					<div id='profile-pic'>
-						<img src={profileImage} alt='profile_image' />
+						<img
+							src={
+								company?.image !== null
+									? `data:image/png;base64,${imageData}`
+									: noImage
+							}
+							alt='profile_image'
+						/>
 					</div>
 					<div id='u-name'>{company.name}</div>
 
@@ -157,8 +186,13 @@ export default function Profile({ company, setCompany, user }) {
 						<div className='cnt-label'>
 							<span>
 								<h2>
-									{ratingCompany?.allRating}
-									<sub>/10</sub>
+									{ratingCompany?.allRating ? (
+										<div>
+											{ratingCompany?.allRating} <sub>/10</sub>
+										</div>
+									) : (
+										'No Rating yet'
+									)}
 								</h2>
 							</span>
 						</div>
@@ -291,7 +325,7 @@ export default function Profile({ company, setCompany, user }) {
 					<p>
 						<u>{ratingCompany?.ratingNum} ratings</u>
 					</p>
-					
+					{user?.loggedIn && (
 						<div>
 							<div className='tb'>
 								<div className='td' id='l-col'>
@@ -320,7 +354,7 @@ export default function Profile({ company, setCompany, user }) {
 								</div>
 							</div>
 						</div>
-					
+					)}
 				</div>
 			</div>
 		</main>

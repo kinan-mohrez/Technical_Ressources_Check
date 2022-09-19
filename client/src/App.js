@@ -60,11 +60,11 @@ function App() {
 					></Route>
 					<Route
 						path='/information'
-						element={<Companyinfo company={company} />}
+						element={<Companyinfo company={company} setCompany={setCompany} />}
 					></Route>
 					<Route
 						path='/thank_you'
-						element={<Thank company={company} />}
+						element={<Thank company={company} setCompany={setCompany} />}
 					></Route>
 					<Route
 						path='/upload'

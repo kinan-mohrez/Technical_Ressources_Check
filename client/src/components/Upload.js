@@ -3,12 +3,21 @@ import { MDBBtn, MDBContainer, MDBFile } from 'mdb-react-ui-kit';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import { useNavigate } from 'react-router-dom';
+import ImageUploading from 'react-images-uploading';
 
 export default function Upload({ company, setCompany }) {
-	const [image, setImage] = useState({ preview: '', data: '' });
-	const [cover, setCover] = useState({ preview: '', data: '' });
-	console.log(company.company_id);
+	const [image, setImage] = useState(null);
+	const [cover, setCover] = useState(null);
+	// console.log(company.company_id);
 	const navigate = useNavigate();
+	const [images, setImages] = React.useState([]);
+	const maxNumber = 69;
+
+	const onChange = (imageList, addUpdateIndex) => {
+		// data for submit
+		// console.log(imageList, addUpdateIndex);
+		setImages(imageList);
+	};
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -20,7 +29,7 @@ export default function Upload({ company, setCompany }) {
 			body: formData,
 		})
 			.then((res) => {
-				console.log(res);
+				// console.log(res);
 				navigate('/thank_you');
 			})
 			.catch((error) => {
@@ -29,12 +38,13 @@ export default function Upload({ company, setCompany }) {
 	};
 	const handleImageChange = (e) => {
 		setImage(e.target.files[0]);
-		console.log(image);
+		// console.log(image);
 	};
 	const handleCoverChange = (e) => {
 		setCover(e.target.files[0]);
-		console.log(cover);
+		// console.log(cover);
 	};
+
 	return (
 		<main>
 			<header>
@@ -72,7 +82,7 @@ export default function Upload({ company, setCompany }) {
 								className='mb-4 w-25
                          btn-grad'
 							>
-								Done
+								finish
 							</MDBBtn>
 						</div>
 					</div>

@@ -335,6 +335,9 @@ app.post('/info', async (req, res) => {
 app.post('/upload/:id', async (req, res) => {
 	console.log(req.params.id);
 	const client = await pool.connect();
+	if (req.files) {
+		// console.log(req.files.image.data.toString('utf8'));
+	}
 	await client
 		.query('UPDATE companies SET image=$1, cover=$2 WHERE company_id=$3 ;', [
 			req.files.image.data,
@@ -342,6 +345,17 @@ app.post('/upload/:id', async (req, res) => {
 			req.params.id,
 		])
 		.then((data) => res.status(201).json(data))
+		.catch((err) => res.send(err));
+
+	client.release();
+});
+app.post('/viewProfile', async (req, res) => {
+	console.log(req.body.company_id);
+	const client = await pool.connect();
+
+	await client
+		.query('SELECT * FROM companies WHERE company_id=$1', [req.body.company_id])
+		.then((data) => res.send(data))
 		.catch((err) => res.send(err));
 
 	client.release();
