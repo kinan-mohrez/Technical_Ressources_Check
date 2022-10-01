@@ -1,5 +1,6 @@
-.hoverPointer :hover{
+.hoverPointer:hover{
    cursor: pointer;
+   color: #8345bc;
 }
 .info{
 width: 10px;
