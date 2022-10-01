@@ -127,11 +127,6 @@ export default function Home({ company, user, setCompany, setUser }) {
 							<i className='material-icons '>search</i>
 						</button>
 					</form>
-
-					<div className='td' id='m-col'>
-						Popular: Crypto Bots E-Commerce Cloud UX/UI Mobile App Blockchain
-						No/Lowcode
-					</div>
 				</div>
 				<div className='coloumn'>
 					{companyDetails.slice(0, visible).map((com, index) => (
@@ -147,7 +142,7 @@ export default function Home({ company, user, setCompany, setUser }) {
 				<div className='seeMore'>
 					{visible < companyDetails.length && (
 						<MDBBtn className='mb-6 w-20 btn-grad' onClick={loadMore}>
-							load more Companies <br />
+							load more
 							<i className='material-icons'>arrow_drop_down</i>
 						</MDBBtn>
 					)}

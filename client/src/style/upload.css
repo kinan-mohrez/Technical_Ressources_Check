@@ -1,0 +1,39 @@
+.previewimage{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    
+    justify-content: center;
+    
+}
+
+.previewimage img{
+    width: 200px;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    justify-items: center;
+}
+
+
+.previewcover{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    
+    justify-content: center;
+    
+}
+
+.previewcover img{
+    width: 1000px;
+    height: 300px;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    justify-items: center;
+}

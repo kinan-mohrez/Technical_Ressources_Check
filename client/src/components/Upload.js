@@ -4,20 +4,15 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import { useNavigate } from 'react-router-dom';
 import ImageUploading from 'react-images-uploading';
+import '../style/upload.css';
 
 export default function Upload({ company, setCompany }) {
 	const [image, setImage] = useState(null);
 	const [cover, setCover] = useState(null);
+	const [previewImage, setPreviewImage] = useState();
+	const [previewCover, setPreviewCover] = useState();
 	// console.log(company.company_id);
 	const navigate = useNavigate();
-	const [images, setImages] = React.useState([]);
-	const maxNumber = 69;
-
-	const onChange = (imageList, addUpdateIndex) => {
-		// data for submit
-		// console.log(imageList, addUpdateIndex);
-		setImages(imageList);
-	};
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -36,12 +31,24 @@ export default function Upload({ company, setCompany }) {
 				console.error(error);
 			});
 	};
+
 	const handleImageChange = (e) => {
 		setImage(e.target.files[0]);
+
+		setPreviewImage(URL.createObjectURL(e.target.files[0]));
+		// const reader = new FileReader();
+		// reader.readAsDataURL(image);
+		// reader.onload = (e) => {
+		// 	console.log(reader.result);
+		// };
+		// reader.readAsDataURL(image);
+
 		// console.log(image);
+		// console.log(e.target.files[0]);
 	};
 	const handleCoverChange = (e) => {
 		setCover(e.target.files[0]);
+		setPreviewCover(URL.createObjectURL(e.target.files[0]));
 		// console.log(cover);
 	};
 
@@ -66,6 +73,10 @@ export default function Upload({ company, setCompany }) {
 									/>
 								</Form.Group>
 
+								<div className='previewimage'>
+									{image && <img src={previewImage} alt='company_image' />}
+								</div>
+
 								<Form.Group controlId='formFile' className='mb-4'>
 									<Form.Label>Upload your cover</Form.Label>
 									<Form.Control
@@ -75,6 +86,9 @@ export default function Upload({ company, setCompany }) {
 										onChange={handleCoverChange}
 									/>
 								</Form.Group>
+								<div className='previewcover'>
+									{cover && <img src={previewCover} alt='company_cover' />}
+								</div>
 							</div>
 						</div>
 						<div className='buton_center'>
